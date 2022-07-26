@@ -2,11 +2,12 @@
 
 ## Installation instructions
 
-1. Clone the repository from [here](https://github.com/EGO4D/episodic-memory).
+1. Clone the Ego4d episodic memory repository from [here](https://github.com/EGO4D/episodic-memory).
     ```
     git clone git@github.com:EGO4D/episodic-memory.git
     cd episodic-memory/VQ2D
     export VQ2D_ROOT=$PWD
+    
     ```
 2. Create conda environment.
     ```
@@ -118,4 +119,4 @@
     ```
 
 ## Acknowledgements
-This codebase relies on [detectron2](https://github.com/facebookresearch/detectron2), [PyTracking](https://github.com/visionml/pytracking), [pfilter](https://github.com/johnhw/pfilter) and [ActivityNet](https://github.com/activitynet/ActivityNet) repositories.
+This codebase relies on [detectron2](https://github.com/facebookresearch/detectron2), [Ego4d](git@github.com:EGO4D/episodic-memory.git) repositories.
