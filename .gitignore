@@ -1,0 +1,15 @@
+__pycache__/
+*.png
+logs/
+full_scale/
+*vis*/
+tmp*
+*.pth
+full_scale
+core
+dependencies/
+.vscode*
+baseline_release/
+baselines/
+outputs/
+data*
