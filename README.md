@@ -119,4 +119,4 @@
     ```
 
 ## Acknowledgements
-This codebase relies on [detectron2](https://github.com/facebookresearch/detectron2), [Ego4d](git@github.com:EGO4D/episodic-memory.git) repositories.
+This codebase relies on [detectron2](https://github.com/facebookresearch/detectron2), [Ego4d](https://github.com/EGO4D)) repositories.
