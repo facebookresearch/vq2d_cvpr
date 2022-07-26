@@ -13,9 +13,21 @@ To this end, we developed a more efficient and effective solution. Concretely, w
 
 ## Installation instructions
 
-1. Please follow the full Installation Instuction in [the VQ2D baseline](https://github.com/EGO4D/episodic-memory/tree/main/VQ2D). 
+1. Clone the Ego4d episodic memory repository from [here](https://github.com/EGO4D/episodic-memory).
+    ```
+    git clone git@github.com:EGO4D/episodic-memory.git
+    cd episodic-memory/VQ2D
+    export VQ2D_ROOT=$PWD
+    
+    ```
+2. Create conda environment.
+    ```
+    conda create -n ego4d_vq2d python=3.8
+    ```
 
-2. Install [submitit](https://github.com/facebookincubator/submitit/blob/main/README.md) for muliple node training.
+3. Please follow the Installation instuction 3-6 in [the VQ2D baseline](https://github.com/EGO4D/episodic-memory/tree/main/VQ2D). 
+
+4. Make sure [submitit](https://github.com/facebookincubator/submitit/blob/main/README.md) is installed for muliple node training. If not,
     ```
     pip install submitit
     ```
@@ -66,4 +78,4 @@ Please be noted that the frame extraction will take longer time because we also 
         ```
 
 ## Acknowledgements
-This codebase relies on the Visual Queries 2D baseline in [ego4d](https://github.com/EGO4D/episodic-memory) and [detectron2](https://github.com/facebookresearch/detectron2) repositories.
+This codebase relies on [detectron2](https://github.com/facebookresearch/detectron2), [Ego4d](https://github.com/EGO4D), and [episodic-memory](https://github.com/EGO4D/episodic-memory) repositories.
