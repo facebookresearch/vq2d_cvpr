@@ -77,21 +77,31 @@ def extract_clip_frame_nos(video_md, clip_annotation, save_root):
     vef = clip_annotation["video_end_frame"]
     video_frames_for_clip = list(frames_to_select(vsf, vef, video_fps, clip_fps))
     # Only save images containing response_track and visual_crop
-    annotation = clip_annotation["annotations"][0]
+    # annotation = clip_annotation["annotations"][0]
     frames_to_save = []
-    for qset_id, qset in annotation["query_sets"].items():
-        if not qset["is_valid"]:
-            continue
-        vc_fno = qset["visual_crop"]["frame_number"]
-        rt_fnos = [rf["frame_number"] for rf in qset["response_track"]]
-        all_fnos = [vc_fno] + rt_fnos
-        for fno in all_fnos:
-            path = os.path.join(save_root, get_image_name_from_clip_uid(clip_uid, fno))
-            if os.path.isfile(path) and os.path.getsize(path)>0:
+    for annotation in clip_annotation["annotations"]:
+        for qset_id, qset in annotation["query_sets"].items():
+            if not qset["is_valid"]:
                 continue
-            frames_to_save.append(
-                {"video_fno": video_frames_for_clip[fno], "save_path": path}
+            q_fno = qset["query_frame"] # query frame
+            vc_fno = qset["visual_crop"]["frame_number"]
+            rt_fnos = [rf["frame_number"] for rf in qset["response_track"]]
+            # also add negative frames
+            rt_fnos = sorted(
+                rt_fnos
             )
+            rt_dur = rt_fnos[-1] - rt_fnos[0] + 1
+
+            rtn_fnos = [rt_fno+rt_dur for rt_fno in rt_fnos if rt_fno+rt_dur<q_fno]
+
+            all_fnos = [vc_fno] + rt_fnos + rtn_fnos
+            for fno in all_fnos:
+                path = os.path.join(save_root, get_image_name_from_clip_uid(clip_uid, fno))
+                if os.path.isfile(path) and os.path.getsize(path)>0:
+                    continue
+                frames_to_save.append(
+                    {"video_fno": video_frames_for_clip[fno], "save_path": path}
+                )
     return frames_to_save
 
 
