@@ -1,6 +1,12 @@
 # Improved Baseline for Visual Queries 2D Localization
 This repo holds the solution of our submission to the VQ2D task in Ego4D Challenge 2022. 
 
+## Updates
+
+- Our checkpoints are released! You can also find them in the Ego4D Model Zoo: https://ego4d-data.org/docs/model-zoo/.
+  - [Config](https://dl.fbaipublicfiles.com/ego4d/model_zoo/vq2d/slurm_8gpus_4nodes_baseline/config.yaml) and [Checkpoint](https://dl.fbaipublicfiles.com/ego4d/model_zoo/vq2d/slurm_8gpus_4nodes_baseline/model.pth), trained with VQ2D v1.0 (used in the first challenge)
+  - [Config](https://dl.fbaipublicfiles.com/ego4d/model_zoo/vq2d/slurm_8gpus_4nodes_baseline_v1.0.5/config.yaml) and [Checkpoint](https://dl.fbaipublicfiles.com/ego4d/model_zoo/vq2d/slurm_8gpus_4nodes_baseline_v1.0.5/model.pth), trained with VQ2D v1.05 (recommended)
+
 ## Introduction
 The recently released Ego4D dataset and benchmark significantly scales and diversifies the first-person visual perception data. 
 Episodic memory is an interesting conception in Ego4D that aims to understand the past visual experience from the recording in the first-person view. It is distinguished from semantic memory in that episodic memory gives responses based on specific first-person experiences.
@@ -80,6 +86,19 @@ Please be noted that the frame extraction will take longer time because we also 
             --test-unannotated-path <PATH TO vq_test_unannotated.json> \
             --test-predictions-path <PATH to test_challenge_predictions.json>
         ```
+        
+## Bibtex
+
+Our report is available on [arXiv](https://arxiv.org/abs/2208.01949).
+```
+@article{xu2022negative,
+  title={Negative Frames Matter in Egocentric Visual Query 2D Localization},
+  author={Xu, Mengmeng and Fu, Cheng-Yang and Li, Yanghao and Ghanem, Bernard and Perez-Rua, Juan-Manuel and Xiang, Tao},
+  journal={arXiv preprint arXiv:2208.01949},
+  year={2022}
+}
+```
+
 ## License
 
 Improved Baseline for Visual Queries 2D Localization is released under the [MIT license](LICENSE).
