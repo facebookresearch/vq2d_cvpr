@@ -1,95 +1,66 @@
-# Improved Baseline for Visual Queries 2D Localization
-This repo holds the solution of our submission to the VQ2D task in Ego4D Challenge 2022. 
+# Methods for Visual Queries 2D Localization
+This repo is a codebase for our submission to the VQ2D task in Ego4D Challenge (CVPR22 and ECCV22). 
+The aim of this repo is to help other researchers and challenge practitioners:
+
+- reproduce some of our experiment results and
+- leverage our pre-trained detection model for other tasks.
+
+Currently, this codebase supports the following methods:
+
+- [Negative Frames Matter in Egocentric Visual Query 2D Localization](https://arxiv.org/abs/2208.01949)
+- [Modeling Object Proposal Sets for Egocentric Visual Query Localization](https://arxiv.org/abs/2211.10528)
 
 ## Updates
+- Our code to ECCV22 challenge is released!
 
 - Our checkpoints are released! You can also find them in the Ego4D Model Zoo: https://ego4d-data.org/docs/model-zoo/.
   - [Config](https://dl.fbaipublicfiles.com/ego4d/model_zoo/vq2d/slurm_8gpus_4nodes_baseline/config.yaml) and [Checkpoint](https://dl.fbaipublicfiles.com/ego4d/model_zoo/vq2d/slurm_8gpus_4nodes_baseline/model.pth), trained with VQ2D v1.0 (used in the first challenge)
   - [Config](https://dl.fbaipublicfiles.com/ego4d/model_zoo/vq2d/slurm_8gpus_4nodes_baseline_v1.0.5/config.yaml) and [Checkpoint](https://dl.fbaipublicfiles.com/ego4d/model_zoo/vq2d/slurm_8gpus_4nodes_baseline_v1.0.5/model.pth), trained with VQ2D v1.05 (recommended)
 
 ## Introduction
-The recently released Ego4D dataset and benchmark significantly scales and diversifies the first-person visual perception data. 
-Episodic memory is an interesting conception in Ego4D that aims to understand the past visual experience from the recording in the first-person view. It is distinguished from semantic memory in that episodic memory gives responses based on specific first-person experiences.
+We deals with the problem of localizing objects
+in image and video datasets from visual exemplars. In particular, we focus on the challenging problem of egocentric visual query localization. We first identify grave implicit biases in current query-conditioned model design and
+visual query datasets. Then, we directly tackle such biases at both frame and object set levels. Concretely, our
+method solves these issues by expanding limited annotations and dynamically dropping object proposals during
+training. Additionally, we propose a novel transformer-based module that allows for object-proposal set context to
+be considered while incorporating query information. We name our module Conditioned Contextual Transformer or
+CocoFormer. Our experiments show the proposed adaptations improve egocentric query detection, leading to a better
+visual query localization system in both 2D and 3D configurations. Thus, we can improve frame-level detection performance from 26.28% to 31.26% in AP, which correspondingly improves the VQ2D and VQ3D localization scores
+by significant margins. Our improved context-aware query object detector ranked first and second respectively in the
+VQ2D and VQ3D tasks in the 2nd Ego4D challenge. 
 
-Our focus is the Ego4D Visual Queries 2D Localization problem in episodic memory tasks. This task requires a system to spatially and temporally localize the most recent appearance of a given object in an egocentric view. 
-The query is registered by a single tight visual crop of the object in a different scene. 
-Our study is based on the three-stage baseline introduced in the Ego4D benchmark suite. The baseline solves the problem by detection+tracking: detect the similar objects in all the frames, then run a tracker from the most confident detection result. 
-In the VQ2D challenge, we identify two limitations of the current baseline: (1) the training configuration has redundant computation which leads to a low convergence rate; (2) the false positive rate is high on background frames. 
-To this end, we developed a more efficient and effective solution. Concretely, we bring the training loop from ~15 days to less than 24h, and we achieve $0.17\%$ spatial-temporal AP, which is $31\%$ higher than the baseline. Our solution got the first ranking on the public leaderboard. 
+## Visulization
 
-## Installation instructions
+[easy] frying pan             |  [hard] blue bin
+:-------------------------:|:-------------------------:
+<img src="demo/ours_easy_frying_pan.gif" width="236" height="180"/> | <img src="demo/ours_hard_blue_bin.gif" height="180"/>
+<!-- ![](visualizations/fryingpan.gif)  |  ![](visualizations/bluebin.gif) -->
 
-1. Clone the Ego4d episodic memory repository from [here](https://github.com/EGO4D/episodic-memory).
-    ```
-    git clone git@github.com:EGO4D/episodic-memory.git
-    cd episodic-memory/VQ2D
-    export VQ2D_ROOT=$PWD
-    
-    ```
-2. Create conda environment.
-    ```
-    conda create -n ego4d_vq2d python=3.8
-    ```
+<!-- ### [easy] frying pan
+<video src="visualizations/ours_easy_frying_pan.mp4" width=360></video>
+<img src="/images/output/video1.gif" width="250" height="250"/>
+### [hard] blue bin
 
-3. Please follow the Installation instuction 3-6 in [the VQ2D baseline](https://github.com/EGO4D/episodic-memory/tree/main/VQ2D). 
+<video src="visualizations/ours_hard_blue_bin.mp4" width=360></video> -->
 
-4. Make sure [submitit](https://github.com/facebookincubator/submitit/blob/main/README.md) is installed for muliple node training. If not,
-    ```
-    pip install submitit
-    ```
 
-## Running experiments
+## Installation
 
-1. Please follow the step 1-4 in [the VQ2D baseline](https://github.com/EGO4D/episodic-memory/tree/main/VQ2D) to pre-process the data. 
-Please be noted that the frame extraction will take longer time because we also sample some negative frames in the video.
+Please find installation instructions in [INSTALL.md](INSTALL.md). It includes system requirement, installation guide, and dataset preperation.
 
-2. Training a model in multiple nodes by following script. It loads images from `INPUT.VQ_IMAGES_ROOT`, and the training log and checkpoints are save in `--job-dir`. You could also use the original command for single node training. 
-    ```
-   python slurm_8node_launch.py \
-        --num-gpus 8 --use-volta32 \
-        --config-file configs/siam_rcnn_8_gpus_e2e_125k.yaml \
-        --resume --num-machines 4 --name ivq2d \
-        --job-dir <PATH to training log dir> \
-        INPUT.VQ_IMAGES_ROOT <PATH to extracted frames dir> \
-        INPUT.VQ_DATA_SPLITS_ROOT data 
-    ```
+## Quick Start
+Run `evaluate_vq2d_one_query.py` with our release checkpoint to quickly see the result.
 
-3. Evaluating the baseline for visual queries 2D localization on val set. 
+```
+    python evaluate_vq2d_one_query.py \
+        model.config_path=$PWD/checkpoint/train_log/slurm_8gpus_4nodes_cocoformer/output/config.yaml \
+        model.checkpoint_path=$PWD/checkpoint/train_log/slurm_8gpus_4nodes_cocoformer/output/model_0064999.pth \
+        data.split=val logging.visualize=True logging.save_dir=$PWD/visualizations
+```
 
-    1. Query all the validation videos in parallel. To do so, pleas edit `slurm_eval_500_array.sh` to specify the paths, then submit the job array to slurm.
-        ```
-        sbatch scripts/faster_evaluation/slurm_eval_500_array.sh
-        ```
-
-    2. Merge all the predictions and evaluate the result. Note that <the evaluation experiment dir> is the output of the evalution script. It is different from training log dir.
-        ```
-        PYTHONPATH=. python scripts/faster_evaluation/merge_results.py \
-            --stats-dir <PATH to evaluation experiment dir>
-        ```
-
-4. Making predictions for Ego4D challenge. This is similar to step 3, but we will use different script.
-    1. Ensure that `vq_test_unannotated.json` is copied to `$VQ2D_ROOT`.
-    2. Query all the test videos in parallel. To do so, pleas edit `slurm_test_500_array.sh` to specify the paths, then submit the job array to slurm.
-        ```
-        sbatch scripts/faster_evaluation/slurm_test_500_array.sh
-        ```
-    3. Merge all the predictions.
-        ```
-        PYTHONPATH=. python scripts/faster_evaluation/merge_results_test.py \
-            --stats-dir <the evaluation experiment dir>
-        ```
-    4. The file `$EXPT_ROOT/visual_queries_log/test_challenge_predictions.json` should be submitted on the EvalAI server.
-    5. Before submission you can validate the format of the predictions using the following:
-        ```
-        cd $VQ2D_ROOT
-        python validate_challenge_predictions.py \
-            --test-unannotated-path <PATH TO vq_test_unannotated.json> \
-            --test-predictions-path <PATH to test_challenge_predictions.json>
-        ```
-        
 ## Bibtex
 
-Our report is available on [arXiv](https://arxiv.org/abs/2208.01949).
+Our CVPR22 Challenge report is available on [arXiv](https://arxiv.org/abs/2208.01949).
 ```
 @article{xu2022negative,
   title={Negative Frames Matter in Egocentric Visual Query 2D Localization},
@@ -97,6 +68,21 @@ Our report is available on [arXiv](https://arxiv.org/abs/2208.01949).
   journal={arXiv preprint arXiv:2208.01949},
   year={2022}
 }
+```
+
+
+Our ECCV22 Challenge report is available on [arXiv](https://arxiv.org/abs/2211.10528).
+
+```
+@article{xu2022where,
+  doi = {10.48550/ARXIV.2211.10528},
+  url = {https://arxiv.org/abs/2211.10528},
+  author = {Xu, Mengmeng and Li, Yanghao and Fu, Cheng-Yang and Ghanem, Bernard and Xiang, Tao and Perez-Rua, Juan-Manuel},
+  title = {Where is my Wallet? Modeling Object Proposal Sets for Egocentric Visual Query Localization},  
+  journal={arXiv preprint arXiv:2211.10528},
+  year={2022}
+}
+
 ```
 
 ## License

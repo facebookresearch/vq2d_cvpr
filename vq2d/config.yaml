@@ -36,7 +36,7 @@ model:
   recency_factor: 1.0
 
 tracker:
-  type: "kys" # Options: [ kys | pfilter ]
+  type: "kys" # Options: [ kys | pfilter | tomp | keep_track ]
   pfilter:
     n_particles: 150
     resample_proportion: 1.0
@@ -46,3 +46,10 @@ tracker:
   kys_tracker:
     debug: False
     model_path: "kys.pth"
+  tomp_tracker:
+    debug: False
+    model_path: "tomp50.pth.tar"  
+  keep_track_tracker:
+    debug: False
+    model_path: "keep_track.pth.tar"
+
