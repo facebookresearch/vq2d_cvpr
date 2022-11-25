@@ -9,7 +9,5 @@ full_scale
 core
 dependencies/
 .vscode*
-baseline_release/
-baselines/
 outputs/
 data*
