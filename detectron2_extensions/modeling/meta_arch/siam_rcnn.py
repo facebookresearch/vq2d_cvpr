@@ -43,7 +43,7 @@ class SiameseRCNN(GeneralizedRCNN):
             "pixel_std": cfg.MODEL.PIXEL_STD,
         }
 
-    def forward(self, batched_inputs: Tuple[Dict[str, torch.Tensor]]) -> Dict[str, Any]:
+    def forward(self, batched_inputs: Tuple[Dict[str, torch.Tensor]], return_top_feature: bool=False) -> Dict[str, Any]:
         """
         Args:
             batched_inputs: a list, batched outputs of :class:`DatasetMapper` .
@@ -131,7 +131,7 @@ class SiameseRCNN(GeneralizedRCNN):
             assert "proposals" in batched_inputs[0]
             proposals = [x["proposals"].to(self.device) for x in batched_inputs]
 
-        results, _ = self.roi_heads(images, features, proposals, ref_features, None)
+        results = self.roi_heads(images, features, proposals, ref_features, None)
 
         if do_postprocess:
             assert (

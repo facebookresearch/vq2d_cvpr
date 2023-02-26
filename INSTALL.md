@@ -119,24 +119,26 @@ You will need to following steps to apply VQ2D evaluation. These are not require
         INPUT.VQ_DATA_SPLITS_ROOT data 
     ```
 
-2. Evaluating the baseline for visual queries 2D localization on val set. 
+2. Evaluating the our model for visual queries 2D localization on val set. 
 
-    1. Query all the validation videos in parallel. To do so, pleas edit `slurm_eval_500_array.sh` to specify the paths, then submit the job array to slurm.
+    1. Download the model ckpt and configuration from [google drive](https://drive.google.com/drive/folders/1Q8lAZocw3k7niWX-gQtThevdgAlCplzA?usp=share_link).
+
+    2. Query all the validation videos in parallel. To do so, pleas edit `slurm_eval_500_array.sh` to specify the paths, then submit the job array to slurm. NB 1, `TRAIN_ROOT` is the folder for the downloaded checkpoint and configuration file, and `EVAL_ROOT` saves the evaluation from each run. NB 2, `N_PART` is the number of the splits. The script will produce `N_PART` results.
         ```
-        sbatch scripts/faster_evaluation/slurm_eval_500_array.sh
+        sbatch scripts/faster_evaluation/slurm_eval_array.sh
         ```
 
-    2. Merge all the predictions and evaluate the result. Note that <the evaluation experiment dir> is the output of the evalution script. It is different from training log dir.
+    3. Merge all the predictions and evaluate the result. Note that <the evaluation experiment dir> is the output of the evalution script (i.e. `EVAL_ROOT`). It is different from training log dir.
         ```
         PYTHONPATH=. python scripts/faster_evaluation/merge_results.py \
             --stats-dir <PATH to evaluation experiment dir>
         ```
 
-3. Making predictions for Ego4D challenge. This is similar to step 3, but we will use different script.
+3. Making predictions for Ego4D challenge. This is similar to step 2, but we will use different script.
     1. Ensure that `vq_test_unannotated.json` is copied to `$VQ2D_ROOT`.
     2. Query all the test videos in parallel. To do so, pleas edit `slurm_test_500_array.sh` to specify the paths, then submit the job array to slurm.
         ```
-        sbatch scripts/faster_evaluation/slurm_test_500_array.sh
+        sbatch scripts/faster_evaluation/slurm_test_array.sh
         ```
     3. Merge all the predictions.
         ```
@@ -144,11 +146,10 @@ You will need to following steps to apply VQ2D evaluation. These are not require
             --stats-dir <the evaluation experiment dir>
         ```
     4. The file `$EXPT_ROOT/visual_queries_log/test_challenge_predictions.json` should be submitted on the EvalAI server.
-    5. Before submission you can validate the format of the predictions using the following:
+    5. Before submission, you can validate the format of the predictions using the following:
         ```
         cd $VQ2D_ROOT
         python validate_challenge_predictions.py \
             --test-unannotated-path <PATH TO vq_test_unannotated.json> \
-            --test-predictions-path <PATH to test_challenge_predictions.json>
         ```
         
