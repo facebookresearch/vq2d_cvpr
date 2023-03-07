@@ -10,4 +10,4 @@ core
 dependencies/
 .vscode*
 outputs/
-data*
+data/*

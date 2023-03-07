@@ -11,6 +11,8 @@ Currently, this codebase supports the following methods:
 - [Modeling Object Proposal Sets for Egocentric Visual Query Localization](https://arxiv.org/abs/2211.10528)
 
 ## Updates
+- We released our [model ckpt](https://drive.google.com/drive/folders/1Q8lAZocw3k7niWX-gQtThevdgAlCplzA?usp=share_link) and [predicted boxes](https://drive.google.com/drive/folders/1x7crW7VD3nolo-HdsiUdVwfIL6xiPSeJ?usp=share_link). See instructions in [INSTALL.md].(INSTALL.md)
+
 - Our code to ECCV22 challenge is released!
 
 - Our checkpoints are released! You can also find them in the Ego4D Model Zoo: https://ego4d-data.org/docs/model-zoo/.
